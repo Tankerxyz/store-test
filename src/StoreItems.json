@@ -1,0 +1,14 @@
+{
+  "banana": {
+    "price": 10
+  },
+  "mandarin": {
+    "price": 16
+  },
+  "apple": {
+    "price": 20
+  },
+  "papaya": {
+    "price": 300
+  }
+}
