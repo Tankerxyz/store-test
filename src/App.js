@@ -4,6 +4,9 @@ import './App.css';
 import items from './StoreItems.json';
 import SpecialOffers from './SpecialOffers';
 
+import StoreList from "./components/StoreList/StoreList";
+import CartList from "./components/CartList/CartList";
+
 function calculateAllPrice(cartItems) {
   return Object.keys(cartItems).reduce((sum, curItem) => {
     return sum + cartItems[curItem].allPrice;
@@ -68,7 +71,7 @@ class App extends Component {
         cartItems,
         cartAllPrice,
       };
-    })
+    });
   };
 
   render() {
@@ -76,45 +79,9 @@ class App extends Component {
 
     return (
       <div className="App">
-        <ul>
-          {
-            Object.keys(items).map((item) => {
-              return (<li key={item}>
-                <header className="store-item-header">
-                  <h2 className="store-item-title">{item}</h2>
-                </header>
-                <section>
-                  <div className="store-item-price">$ {items[item].price}</div>
-                  <button className="buy-button" onClick={this.addToCart(item)}>Buy</button>
-                </section>
-              </li>)
-            })
-          }
-        </ul>
-        <div className="cart" style={{backgroundColor: "lightgreen"}}>
-          <header>
-            <h2>Cart</h2>
-            <div>
-              All price: {cartAllPrice}
-            </div>
-          </header>
-          <ul className="cart-list">
-            {
-              Object.keys(cartItems).map((item) => {
-                return (<li key={item}>
-                  <header>
-                    <h4>{item}</h4>
-                  </header>
-                  <section>
-                    <div>count: {cartItems[item].count}</div>
-                    <div>allPrice: {cartItems[item].allPrice}</div>
-                    <button onClick={this.removeFromCart(item)}>Remove</button>
-                  </section>
-                </li>)
-              })
-            }
-          </ul>
-        </div>
+        <StoreList items={items} onBuy={this.addToCart} />
+
+        <CartList onRemove={this.removeFromCart} cartAllPrice={cartAllPrice} cartItems={cartItems}/>
       </div>
     );
   }
