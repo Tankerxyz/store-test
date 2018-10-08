@@ -1,0 +1,45 @@
+.Header {
+    --header-color: lightgreen;
+    --header-active-color: seagreen;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 50px;
+    box-shadow: 1px 0 3px 2px rgba(0, 0, 0, 0.1);
+    background-color: var(--header-color);
+}
+
+.Header .Header-item {
+    height: 100%;
+    padding: 0 15px;
+    color: white;
+    cursor: pointer;
+}
+
+.Header .Header-item a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: blue;
+    height: 100%;
+}
+
+.Header .Header-item:hover {
+    background-color: var(--header-active-color);
+}
+
+.Header .Header-item.cart {
+    display: flex;
+    align-items: center;
+}
+
+.Header .Header-item.cart .cart-price {
+    padding-right: 10px;
+    color: grey;
+}
+
+.Header .Header-item.cart:hover .cart-price {
+    color: white;
+}
