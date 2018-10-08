@@ -1,14 +1,18 @@
 {
   "banana": {
+    "image": "https://loremflickr.com/320/240/banana",
     "price": 10
   },
   "mandarin": {
+    "image": "https://loremflickr.com/320/240/mandarin",
     "price": 16
   },
   "apple": {
+    "image": "https://loremflickr.com/320/240/apple",
     "price": 20
   },
   "papaya": {
+    "image": "https://loremflickr.com/320/240/papaya",
     "price": 300
   }
 }
