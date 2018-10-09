@@ -1,30 +1,15 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import './App.css';
 
-import items from './StoreItems.json';
-import SpecialOffers from './SpecialOffers';
+import items from './mock-data/StoreItems.json';
 
 import StoreList from "./components/StoreList/StoreList";
 import CartList from "./components/CartList/CartList";
 import Header from "./components/Header/Header";
 import StoreItemPage from "./components/StoreItemPage/StoreItemPage";
 
-function calculateAllPrice(cartItems) {
-  return Object.keys(cartItems).reduce((sum, curItem) => {
-    return sum + cartItems[curItem].allPrice;
-  }, 0);
-}
+import { calculateAllPrice, getAllPrice } from "./utils/priceUtils";
 
-function getAllPrice(itemName, count) {
-  const specialOffer = SpecialOffers[itemName];
-
-  if (specialOffer) {
-    return specialOffer(count, items[itemName].price);
-  } else {
-    return count * items[itemName].price;
-  }
-}
 
 class App extends Component {
   state = {
@@ -32,19 +17,38 @@ class App extends Component {
     cartAllPrice: 0,
   };
 
-  addToCart = (itemName) => () => {
-    this.setState(prevState => {
-      const { cartItems } = prevState;
+  buyItem = (itemName) => (cartItems) => {
+    const item = cartItems[itemName];
+    if (item) {
+      item.count++;
+      item.allPrice = getAllPrice(itemName, item.count);
+    } else {
+      cartItems[itemName] = {
+        count: 1,
+        allPrice: items[itemName].price,
+      };
+    }
 
-      if (!cartItems[itemName]) {
-        cartItems[itemName] = {
-          count: 1,
-          allPrice: items[itemName].price,
-        };
-      } else {
-        cartItems[itemName].count++;
-        cartItems[itemName].allPrice = getAllPrice(itemName, cartItems[itemName].count);
-      }
+    return cartItems;
+  };
+
+  removeItem = (itemName) => (cartItems) => {
+    const item = cartItems[itemName];
+
+    item.count--;
+    if (item.count) {
+      item.allPrice = getAllPrice(itemName, item.count);
+    } else {
+      delete cartItems[itemName];
+    }
+
+    return cartItems;
+  };
+
+  updateCart = (cartActionFn) => {
+    this.setState(prevState => {
+      let { cartItems } = prevState;
+      cartItems = cartActionFn(cartItems);
 
       const cartAllPrice = calculateAllPrice(cartItems);
 
@@ -55,26 +59,12 @@ class App extends Component {
     });
   };
 
+  addToCart = (itemName) => () => {
+    this.updateCart(this.buyItem(itemName))
+  };
+
   removeFromCart = (itemName) => () => {
-    this.setState(prevState => {
-      const { cartItems } = prevState;
-
-      if (cartItems[itemName]) {
-        cartItems[itemName].count--;
-        if (cartItems[itemName].count) {
-          cartItems[itemName].allPrice = getAllPrice(itemName, cartItems[itemName].count);
-        } else {
-          delete cartItems[itemName];
-        }
-      }
-
-      const cartAllPrice = calculateAllPrice(cartItems);
-
-      return {
-        cartItems,
-        cartAllPrice,
-      };
-    });
+    this.updateCart(this.removeItem(itemName));
   };
 
   render() {
