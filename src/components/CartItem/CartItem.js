@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const CartItem = (props) => {
   const { item: { itemName, count, allPrice } } = props;
@@ -6,7 +7,9 @@ const CartItem = (props) => {
   return (
     <li>
       <header>
-        <h4>{itemName}</h4>
+        <Link to={{pathname: `/item/${itemName}`}}>
+          <h4>{itemName}</h4>
+        </Link>
       </header>
       <section>
         <div>count: {count}</div>
