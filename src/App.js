@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch, Link, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 
 import items from './StoreItems.json';
@@ -8,6 +8,7 @@ import SpecialOffers from './SpecialOffers';
 import StoreList from "./components/StoreList/StoreList";
 import CartList from "./components/CartList/CartList";
 import Header from "./components/Header/Header";
+import StoreItemPage from "./components/StoreItemPage/StoreItemPage";
 
 function calculateAllPrice(cartItems) {
   return Object.keys(cartItems).reduce((sum, curItem) => {
@@ -86,6 +87,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={() => <StoreList items={items} onBuy={this.addToCart} />} />
             <Route path="/cart" component={() => <CartList onRemove={this.removeFromCart} cartAllPrice={cartAllPrice} cartItems={cartItems}/>} />
+            <Route path="/item/:itemName" component={({ match }) => <StoreItemPage item={items[match.params.itemName]} onBuy={this.addToCart}/>} />
             <Redirect to="/"/>
           </Switch>
         </div>
